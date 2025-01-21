@@ -51,6 +51,7 @@ public class PlanetServiceTest {
 
         Long one = 1L;
 
+        Assertions.assertThat(planetService.findById(one)).isNotEmpty();
         Assertions.assertThat(planetService.findById(one).get()).isEqualTo(PLANET);
     }
 
