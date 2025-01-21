@@ -9,4 +9,10 @@ public class PlanetConstants {
             .climate("climate")
             .terrain("terrain")
             .build();
+
+    public static final Planet INVALID_PLANET = Planet.builder()
+            .name("")
+            .climate("")
+            .terrain("")
+            .build();
 }
