@@ -13,6 +13,7 @@ import java.util.Optional;
 import static com.automation.test.common.PlanetConstants.PLANET;
 import static com.automation.test.common.PlanetConstants.INVALID_PLANET;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,6 +65,26 @@ public class PlanetServiceTest {
         Assertions.assertThat(planetService.findById(one)).isEmpty();
     }
 
+    @Test
+    public void findPlanetByName_ByExistingId_ReturnsPlanet(){
+        when(planetRepository.findByName(anyString())).thenReturn(Optional.of(PLANET));
+
+        String planetOne = "Earth";
+
+        Assertions.assertThat(planetService.findByName(planetOne)).isNotEmpty();
+        Assertions.assertThat(planetService.findByName(planetOne).get()).isEqualTo(PLANET);
+
+    }
+
+    @Test
+    public void findPlanetByName_ByUnexistingId_ReturnsPlanet(){
+        when(planetRepository.findByName(anyString())).thenReturn(Optional.empty());
+
+        String planetOne = "Earth";
+
+        Assertions.assertThat(planetService.findByName(planetOne)).isEmpty();
+
+    }
 
 
 }

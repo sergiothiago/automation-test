@@ -5,6 +5,7 @@ import com.automation.test.domain.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,12 @@ public class PlanetController {
     @GetMapping("/{id}")
     public ResponseEntity<Planet> get(@PathVariable("id") Long id) {
         return planetService.findById(id).map(planet -> ResponseEntity.ok(planet))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Planet> findByName(@PathVariable("name") String name) {
+        return planetService.findByName(name).map(planet -> ResponseEntity.ok(planet))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
