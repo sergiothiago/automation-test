@@ -30,4 +30,9 @@ public class Planet {
     private String terrain;
     @EqualsAndHashCode.Include
     private String name;
+
+    public Planet(String climate, String terrain) {
+        this.climate = climate;
+        this.terrain = terrain;
+    }
 }

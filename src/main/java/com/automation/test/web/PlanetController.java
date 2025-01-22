@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/planets")
@@ -37,6 +40,12 @@ public class PlanetController {
     public ResponseEntity<Planet> findByName(@PathVariable("name") String name) {
         return planetService.findByName(name).map(planet -> ResponseEntity.ok(planet))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/planets")
+    public ResponseEntity<List<Planet>> list() {
+        List<Planet> planets = planetService.list();
+        return ResponseEntity.ok(planets);
     }
 
 }
