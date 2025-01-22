@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static com.automation.test.common.PlanetConstants.PLANET;
@@ -84,6 +85,17 @@ public class PlanetServiceTest {
 
         Assertions.assertThat(planetService.findByName(planetOne)).isEmpty();
 
+    }
+
+    @Test
+    public void findAll_ByExistingId_ReturnsPlanet(){
+        when(planetRepository.findAll()).thenReturn(Arrays.asList(PLANET));
+
+        Assertions.assertThat(planetService.list()).isNotEmpty();
+        Assertions.assertThat(planetService.list().
+                stream().
+                findFirst().
+                get()).isEqualTo(PLANET);
     }
 
 
