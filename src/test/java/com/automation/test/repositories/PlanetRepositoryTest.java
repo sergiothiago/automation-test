@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static com.automation.test.common.PlanetConstants.PLANET;
+import static com.automation.test.common.PlanetConstants.INVALID_PLANET;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class PlanetRepositoryTest {
@@ -29,5 +31,15 @@ public class PlanetRepositoryTest {
         assertThat(PLANET.getTerrain()).isEqualTo(sut.getTerrain());
         assertThat(PLANET.getClimate()).isEqualTo(sut.getClimate());
     }
+
+    @Test
+    public void createPlanet_WithInvalidData_ThrowsException(){
+        Planet emptyPlanet = new Planet();
+        Planet invalidPlanet = INVALID_PLANET;
+
+        assertThatThrownBy( () -> planetRepository.save(emptyPlanet)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy( () -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
+    }
+
 
 }
