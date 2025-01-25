@@ -37,7 +37,7 @@ public class Planet {
     @NotEmpty
     private String terrain;
     @EqualsAndHashCode.Include
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @NotEmpty
     private String name;
 

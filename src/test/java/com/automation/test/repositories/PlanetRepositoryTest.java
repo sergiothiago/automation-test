@@ -2,6 +2,8 @@ package com.automation.test.repositories;
 
 import com.automation.test.domain.Planet;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.automation.test.domain.PlanetService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -39,6 +41,15 @@ public class PlanetRepositoryTest {
 
         assertThatThrownBy( () -> planetRepository.save(emptyPlanet)).isInstanceOf(RuntimeException.class);
         assertThatThrownBy( () -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void createPlanet_WithExistingName_ThrowsException(){
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+        testEntityManager.detach(planet);
+        planet.setId(null);
+
+       assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
     }
 
 
