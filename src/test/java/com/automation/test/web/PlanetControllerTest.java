@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -106,5 +107,29 @@ public class PlanetControllerTest {
 
     }
 
+    @Test
+    public void getPlanet_ByExistingName_Returns() throws Exception {
+
+        when(planetService.findByName(anyString())).thenReturn(Optional.of(PLANET));
+
+        mockMvc.perform(
+                        get("/planets/name/name")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(PLANET));
+    }
+
+    @Test
+    @DisplayName("Integration getPlanet_ByUnexistingName_Returns")
+    public void getPlanet_ByUnexistingName_Returns() throws Exception {
+
+        when(planetService.findByName("quazarPlanet")).thenReturn(Optional.empty());
+
+        mockMvc.perform(
+                        get("/planets/name/quazarPlanet")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
 
 }
