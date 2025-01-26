@@ -4,6 +4,7 @@ import com.automation.test.domain.Planet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.automation.test.domain.PlanetService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class PlanetRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
+
+    @AfterEach
+    public void afterEach(){
+        PLANET.setId(null);
+    }
 
     @Test
     public void createPlanet_WithValidData_ReturnsPlanet(){
@@ -50,7 +56,7 @@ public class PlanetRepositoryTest {
     @DisplayName("Repository getPlanet_ByExistingId_ReturnsPlanet")
     public void getPlanet_ByExistingId_Returns(){
 
-        Planet planet = testEntityManager.persist(PLANET);
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
 
         Optional<Planet> sut = planetRepository.findById(planet.getId());
 
@@ -58,5 +64,23 @@ public class PlanetRepositoryTest {
         assertThat(sut.get().getName()).isEqualTo(PLANET.getName());
     }
 
+    @Test
+    @DisplayName("repository getPlanet_ByUnexistingId_ReturnsPlanet")
+    public void getPlanet_ByUnexistingId_ReturnsPlanet(){
+
+        Optional<Planet> sut = planetRepository.findById(999L);
+
+        assertThat(sut).isEmpty();
+
+    }
+
+    @Test
+    public void createPlanet_WithExistingName_ThrowsException(){
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+        testEntityManager.detach(planet);
+        planet.setId(null);
+
+       assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
+    }
 
 }
