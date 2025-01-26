@@ -83,4 +83,28 @@ public class PlanetRepositoryTest {
        assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
     }
 
+    @Test
+    @DisplayName("repository getPlanet_ByUniexistingName_ReturnsEmpty")
+    public void getPlanet_ByUniexistingName_ReturnsEmpty(){
+
+        Optional<Planet> sut = planetRepository.findByName("Quazar Planet");
+
+        assertThat(sut).isEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Repository getPlanet_ByExistingName_ReturnsPlanet")
+    public void getPlanet_ByExistingName_Returns(){
+
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+
+        Optional<Planet> sut = planetRepository.findByName("name");
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.get().getName()).isEqualTo(PLANET.getName());
+    }
+
+
+
 }
