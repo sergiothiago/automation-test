@@ -4,6 +4,7 @@ import com.automation.test.domain.Planet;
 import com.automation.test.domain.PlanetService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -92,7 +93,18 @@ public class PlanetControllerTest {
                 .andExpect(jsonPath("$").value(PLANET));
     }
 
+    @Test
+    @DisplayName("Integration getPlanet_ByUnexistingId_Returns")
+    public void getPlanet_ByUnexistingId_Returns() throws Exception {
 
+        when(planetService.findById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(
+                get("/planets/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
 
 
 }
