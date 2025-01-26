@@ -4,10 +4,13 @@ import com.automation.test.domain.Planet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.automation.test.domain.PlanetService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import java.util.Optional;
 
 import static com.automation.test.common.PlanetConstants.PLANET;
 import static com.automation.test.common.PlanetConstants.INVALID_PLANET;
@@ -43,14 +46,17 @@ public class PlanetRepositoryTest {
         assertThatThrownBy( () -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
     }
 
-//    @Test
-//    public void createPlanet_WithExistingName_ThrowsException(){
-//        Planet planet = testEntityManager.persistFlushFind(PLANET);
-//        testEntityManager.detach(planet);
-//        planet.setId(null);
-//
-//       assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
-//    }
+    @Test
+    @DisplayName("Repository getPlanet_ByExistingId_ReturnsPlanet")
+    public void getPlanet_ByExistingId_Returns(){
+
+        Planet planet = testEntityManager.persist(PLANET);
+
+        Optional<Planet> sut = planetRepository.findById(planet.getId());
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.get().getName()).isEqualTo(PLANET.getName());
+    }
 
 
 }
