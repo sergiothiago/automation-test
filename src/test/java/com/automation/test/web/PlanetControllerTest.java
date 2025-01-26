@@ -100,7 +100,7 @@ public class PlanetControllerTest {
         when(planetService.findById(999L)).thenReturn(Optional.empty());
 
         mockMvc.perform(
-                get("/planets/1")
+                get("/planets/999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
