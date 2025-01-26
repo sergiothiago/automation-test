@@ -12,8 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static com.automation.test.common.PlanetConstants.PLANET;
 import static com.automation.test.common.PlanetConstants.INVALID_PLANET;
@@ -75,6 +79,18 @@ public class PlanetControllerTest {
 
     }
 
+
+    @Test
+    public void getPlanet_ByExistingId_Returns() throws Exception {
+
+        when(planetService.findById(anyLong())).thenReturn(Optional.of(PLANET));
+
+        mockMvc.perform(
+                        get("/planets/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(PLANET));
+    }
 
 
 }
