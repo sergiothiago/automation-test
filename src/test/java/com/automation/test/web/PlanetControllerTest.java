@@ -20,8 +20,10 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static com.automation.test.common.PlanetConstants.PLANET;
@@ -151,4 +153,18 @@ public class PlanetControllerTest {
 
     }
 
+
+
+
+    @Test
+    @DisplayName("Controller remove_ByExistingId_ReturnsPlanet")
+    public void remove_ByExistingId_ReturnsPlanet() throws Exception {
+        doNothing().when(planetService).remove(1L);
+
+        mockMvc.perform(
+                        delete("/planets/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+    }
 }
