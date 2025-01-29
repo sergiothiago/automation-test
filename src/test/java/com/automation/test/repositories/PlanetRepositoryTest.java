@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.automation.test.common.PlanetConstants.PLANET;
@@ -103,6 +104,17 @@ public class PlanetRepositoryTest {
 
         assertThat(sut).isNotNull();
         assertThat(sut.get().getName()).isEqualTo(PLANET.getName());
+    }
+
+    @Test
+    @DisplayName("Repository findAll_ByExistingId_ReturnsPlanet")
+    public void findAll_Existing_ReturnsPlanet() throws Exception {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+
+        List<Planet> sut = planetRepository.findAll();
+        assertThat(sut).isNotNull();
+        assertThat(sut.get(0).getName()).isEqualTo(PLANET.getName());
+
     }
 
 

@@ -44,7 +44,7 @@ public class PlanetController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/planets")
+    @GetMapping
     public ResponseEntity<List<Planet>> list() {
         List<Planet> planets = planetService.list();
         return ResponseEntity.ok(planets);

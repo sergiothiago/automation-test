@@ -13,11 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Optional;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -129,6 +132,22 @@ public class PlanetControllerTest {
                         get("/planets/name/quazarPlanet")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    @DisplayName("Integration findAll_ByExistingId_ReturnsPlanet")
+    public void findAll_ByExistingId_ReturnsPlanet() throws Exception {
+
+        when(planetService.list()).thenReturn(Arrays.asList(PLANET));
+
+        mockMvc.perform(
+                get("/planets")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name").value(PLANET.getName()))
+                .andExpect(jsonPath("$[0].climate").value(PLANET.getClimate()));
 
     }
 
