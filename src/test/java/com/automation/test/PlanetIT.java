@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -68,4 +69,14 @@ public class PlanetIT {
         Assertions.assertThat(sut.getBody()).isNotNull();
         Assertions.assertThat(sut.getBody()).hasSize(4);
     }
+
+    @Test
+    public void removeByIdPlanet_ReturnsPlanet(){
+        ResponseEntity<Void> sut = testRestTemplate.exchange(
+                "/planets/1", HttpMethod.DELETE, null, Void.class);
+
+        Assertions.assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+
 }
